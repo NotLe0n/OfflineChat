@@ -47,6 +47,8 @@ internal class WindowAbstraction : Overlay
         this.drawFuncs = drawFuncs;
 	}
 
+    private string error = "";
+    private bool errorOccured = false;
     private bool windowOpen = true;
 	protected override Task Render()
 	{
@@ -72,8 +74,18 @@ internal class WindowAbstraction : Overlay
         }
         catch (Exception ex)
 		{
-            ImGui.Begin("ERROR");
-            ImGui.TextColored(new(1, 0, 0, 1), ex.Message);
+            error = ex.Message;
+            errorOccured = true;
+        }
+
+        if (errorOccured) {
+            ImGui.SetNextWindowSizeConstraints(new(300, 40), new(800, 500));
+            ImGui.Begin("ERROR", ref errorOccured, ImGuiWindowFlags.AlwaysAutoResize);
+
+            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0, 0, 1)); // give red color
+            ImGui.TextWrapped(error);
+            ImGui.PopStyleColor();
+
             ImGui.End();
         }
 

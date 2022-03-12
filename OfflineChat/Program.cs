@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace OfflineChat;
 
@@ -35,9 +36,21 @@ public class Program
 		if (!infoOpen)
 			return;
 
-		ImGui.SetNextWindowSizeConstraints(new(500, 50), new(800, 80));
+		ImGui.SetNextWindowSizeConstraints(new(500, 50), new(800, 100));
 		ImGui.Begin("Info", ref infoOpen, ImGuiWindowFlags.AlwaysAutoResize);
-		ImGui.TextWrapped("Das ist ein Chat Programm! Es hat die besonderheit, dass es über das Tauschlaufwerk der Schule, statt über das Internet läuft.\nDen Code kann man hier anschauen: <TODO: Link hinzufügen>");
+		ImGui.TextWrapped("Das ist ein Chat Programm! Es hat die besonderheit, dass es über das Tauschlaufwerk der Schule, statt über das Internet läuft.\nDen Code kann man hier anschauen:");
+
+		ImGui.TextColored(new(0.3f, 0.3f, 1, 1), "https://bit.ly/OfflineChatSrc");
+		if (ImGui.IsItemClicked())
+		{
+			// open link in browser
+			var psi = new ProcessStartInfo() 
+			{ 
+				UseShellExecute = true,
+				FileName = "https://bit.ly/OfflineChatSrc"
+			};
+			Process.Start(psi);
+		}
 		ImGui.End();
 	}
 
