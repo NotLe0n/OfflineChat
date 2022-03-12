@@ -21,3 +21,8 @@ If the last time the program was used was a day ago, the chat will clear.
 2. Extract the zip file
 3. Open OfflineChat.exe
 4. Start chatting
+
+## Dependencies:
+* https://github.com/zaafar/ClickableTransparentOverlay
+* https://github.com/mellinoe/ImGui.NET/
+* https://github.com/mellinoe/veldrid
