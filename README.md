@@ -10,11 +10,9 @@ The program constantly reads the file for any updates.
 Sending a chat message will append the following formatted text to the log file:\
 `[Time in mm:ss format] <Username of the PC>: message`
 
-The following chat commands are currently supported:
-- `-exit`: Closes the application just like the 'X' button.
-- `-crash`: Throws an exception which gets catched by the program and displayed in a seperate window.
+Type `-listcommands` for a list of chat commands
 
-If the last time the program was used was a day ago, the chat will clear.
+If the last person left the room, the chat will clear.
 
 ## How to use:
 1. Download `OfflineChat.zip` from the ["Releases" tab](https://github.com/NotLe0n/OfflineChat/releases)
