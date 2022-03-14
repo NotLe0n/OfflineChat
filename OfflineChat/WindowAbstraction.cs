@@ -67,6 +67,7 @@ internal class WindowAbstraction : Overlay
 
         try
         {
+            // call all draw funcs
             foreach (var func in drawFuncs)
             {
                 func();
@@ -74,12 +75,13 @@ internal class WindowAbstraction : Overlay
         }
         catch (Exception ex)
 		{
-            error = ex.Message;
+            error = ex.Message + "\n" + ex.StackTrace;
             errorOccured = true;
         }
 
+        // open error window
         if (errorOccured) {
-            ImGui.SetNextWindowSizeConstraints(new(300, 40), new(800, 500));
+            ImGui.SetNextWindowSizeConstraints(new(300, 40), new(900, 700));
             ImGui.Begin("ERROR", ref errorOccured, ImGuiWindowFlags.AlwaysAutoResize);
 
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0, 0, 1)); // give red color

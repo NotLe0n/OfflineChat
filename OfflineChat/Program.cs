@@ -8,12 +8,10 @@ namespace OfflineChat;
 
 public class Program
 {
-	private static Chat chat;
+	public static readonly Chat chat = new(System.IO.Directory.GetCurrentDirectory());
 
 	private static async Task Main(string[] args)
 	{
-		chat = new Chat(System.IO.Directory.GetCurrentDirectory());
-
 		using var window = new WindowAbstraction("Textchat", new(400, 200, 600, 300))
 		{
 			SizeMin = new(400, 150),
@@ -57,6 +55,7 @@ public class Program
 	const int footerHeight = 69;
 	const int onlineListWidth = 150;
 
+	private static string inputString = string.Empty;
 	private static void DrawFunction()
 	{
 		// update the chat log file
@@ -73,14 +72,20 @@ public class Program
 
 		ImGui.Separator();
 
-		string inputString = $"<{Environment.UserName}>: ";
+		string userLabel = $"<{Environment.UserName}>: ";
+		ImGui.Text(userLabel);
+		ImGui.SameLine(); // draw at the same height as inputtext
 
-		ImGui.PushItemWidth(windowSize.X - 15);
+		// set InputTextWidth
+		ImGui.PushItemWidth(windowSize.X - 25 - ImGui.CalcTextSize(userLabel).X);
+
+		// if input text has been clicked
 		if (ImGui.InputText("", ref inputString, 200u,
 			ImGuiInputTextFlags.AllowTabInput | ImGuiInputTextFlags.EnterReturnsTrue))
 		{
 			// write message without the name label (gets added later)
-			chat.WriteMessage(inputString.Replace($"<{Environment.UserName}>: ", ""));
+			chat.WriteMessage(inputString.Replace(userLabel, ""));
+			inputString = string.Empty;
 		};
 	}
 
@@ -117,22 +122,18 @@ public class Program
 
 	private static void UpdateFile()
 	{
-		// read the contents of the chat log file
-		chat.ReadLogFile();
-
-		// update last time
-		DateTime lastTimeOpened = chat.Date;
-
-		// update users
-		chat.UpdateUsers();
-
-		// if one day has passed, clear the logs else update file
-		if (DateTime.Now - lastTimeOpened > TimeSpan.FromDays(1))
+		try
 		{
-			chat.Clear();
+			// read the contents of the chat log file
+			chat.ReadLogFile();
+		}
+		catch // will catch if another user is currently reading/writing the file
+		{
+			return;
+			// do not do anything
 		}
 
-		// update file
-		chat.WriteInfoToFile();
+		// update users after clearing so all previous users don't appear in the list after clearing
+		chat.UpdateUsers();
 	}
 }
